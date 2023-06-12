@@ -1,0 +1,186 @@
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	border-width: 0;
+	border-style: solid;
+	border-color: #dfe4ea;
+}
+
+html {
+	font-size: 16px;
+	margin: 0;
+	padding: 0;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Lato, Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+	;
+}
+
+body {
+	width: 100%;
+	height: 100vh;
+	background:
+		radial-gradient(black 3px, transparent 4px),
+		radial-gradient(black 3px, transparent 4px),
+		linear-gradient(#fff 4px, transparent 0),
+		linear-gradient(45deg, transparent 74px, transparent 75px, #a4a4a4 75px, #a4a4a4 76px, transparent 77px, transparent 109px),
+		linear-gradient(-45deg, transparent 75px, transparent 76px, #a4a4a4 76px, #a4a4a4 77px, transparent 78px, transparent 109px),
+		#fff;
+	background-size: 109px 109px, 109px 109px, 100% 6px, 109px 109px, 109px 109px;
+	background-position: 54px 55px, 0px 0px, 0px 0px, 0px 0px, 0px 0px;
+	background-attachment: fixed;
+}
+
+.stack-tv-container {
+	position: relative;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	padding: 1rem;
+}
+
+.stack-tv-box {
+	position: relative;
+	box-sizing: border-box;
+	margin: 0;
+	margin-right: 2rem;
+	width: 75%;
+	height: 100%;
+	max-width: 100%;
+	max-height: 100%;
+	border-radius: 1rem;
+	overflow: hidden;
+	background: #2f3542;
+	border: 2px solid #2f3542;
+	box-shadow: 0px 0px 1rem  #2f3542;
+	transition: all .3s ease;
+}
+.stack-tv-box:hover{
+	box-shadow: 0px 0px 2rem  #2f3542;
+}
+
+.stack-tv-video {
+	position: absolute;
+	margin: auto;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	height: 100%;
+	width: 100%;
+	max-width: 100%;
+	max-height: 100%;
+}
+
+.stack-tv-switch {
+	display: flex;
+	flex-direction: column;
+	width: 25%;
+	height: 100%;
+	overflow: hidden;
+	background: #2f3542;
+	border-radius: 1rem;
+	border: 2px solid #2f3542;
+	box-shadow: 0px 0px 1rem  #2f3542;
+	transition: all .3s ease;
+}
+.stack-tv-switch:hover{
+	box-shadow: 0px 0px 2rem  #2f3542;
+}
+.stack-tv-switch-list{
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: calc(100% - 2rem);
+	overflow: hidden;
+	overflow-y: auto;
+}
+.stack-tv-switch-head{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: 100%;
+	height: 2rem;
+	background: white;
+	color: #2f3542;
+	font-weight: bold;	
+}
+
+.stack-tv-switch-item {
+	width: 100%;
+	height: 10rem;
+	color: white;
+	background-color: black;
+	cursor: pointer;
+	flex: 0 0 auto;
+	margin: 0;
+	margin-bottom: 1rem;
+}
+
+.stack-tv-switch-item:last-child {
+	margin-bottom: 0;
+}
+.stack-tv-switch-item .tv-name{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: 100%;
+	height: 25%;
+}
+.stack-tv-switch-item img {
+	width: 100%;
+	height: 75%;
+	user-select: none;
+	object-fit: contain;
+	transition:all .3s ease;
+}
+.stack-tv-switch-item:hover img{
+	transform: scale(1.1);
+}
+@media only screen and (max-width: 767px) {
+	.stack-tv-container {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.stack-tv-box {
+		width: 100%;
+		height: 75%;
+		margin: 0;
+		margin-bottom: 2rem;
+	}
+	.stack-tv-switch{
+		display: flex;
+		flex-direction: row;
+		width: 100%;
+		height: 25%;
+	}
+	.stack-tv-switch-head{
+		width: 2rem;
+		height: 100%;
+		writing-mode: vertical-lr;
+	}
+	.stack-tv-switch-list {
+		display: flex;
+		flex-direction: row;
+		width: calc(100% - 2rem);
+		height: 100%;
+		overflow: hidden;
+		overflow-x: auto;
+	}
+
+	.stack-tv-switch-item {
+		width: 50%;
+		height: 100%;
+		margin: 0;
+		margin-right: 1rem;
+	}
+
+	.stack-tv-switch-item:last-child {
+		margin-right: 0;
+	}
+}
