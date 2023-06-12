@@ -14,3 +14,9 @@ https://tv.stackblog.cf?url=https://iptv-org.github.io/iptv/index.m3u
 ## Preview
 
 [Stack TV](https://tv.stackblog.cf)
+
+## Thanks
+
+使用到的测试源:
+- [iptv-org](https://github.com/iptv-org/iptv)
+- [fanmingming](https://github.com/fanmingming/live)
