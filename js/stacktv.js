@@ -10,8 +10,8 @@
 		selector: "body",
 		default_url: "https://vmcdn.stackblog.ml/video/aboutstacktv.m3u8",
 		default_logo: "https://stackblog.cf/img/logo.png",
-		hls:true,
-		tv_list:[{
+		hls: true,
+		tv_list: [{
 			'tv_name': 'Stack TV',
 			'tv_logo': 'https://stackblog.cf/img/logo.png',
 			'tv_url': 'https://vmcdn.stackblog.ml/video/aboutstacktv.m3u8'
@@ -30,19 +30,21 @@
 			Object.defineProperties(this._setting, {
 				tv: {
 					get: function() {
-						this._tv = _this._stackvideo ? _this._stackvideo : document.querySelector("video");
+						this._tv = _this._stackvideo ? _this._stackvideo : document
+							.querySelector("video");
 						return this._tv;
 					}
 				},
-				tv_list:{
-					get: function(){
+				tv_list: {
+					get: function() {
 						return this._tv_list || [];
 					},
-					set: function(newValue){
-						if(newValue instanceof Array){
+					set: function(newValue) {
+						if (newValue instanceof Array) {
 							this._tv_list = newValue;
+							console.info("节目列表已更新");
 							_this._genSwitches();
-						}else{
+						} else {
 							console.warn("赋值类型必须是数组！");
 						}
 					}
@@ -54,73 +56,137 @@
 			return this;
 		},
 		loadUrl: function(url) {
-			if(this._setting.hls){
-				if(Hls.isSupported()){
+			if (this._setting.hls) {
+				if (Hls.isSupported()) {
 					console.info("将使用hls播放视频");
 					this.hls = new Hls();
 					this.hls.loadSource(url);
 					this.hls.attachMedia(this._setting.tv);
-				}else{
+				} else {
 					this._setting.tv.src = url;
 				}
-			}else if(this._setting.tv.canPlayType('application/vnd.apple.mpegurl')){
+			} else if (this._setting.tv.canPlayType('application/vnd.apple.mpegurl')) {
 				this._setting.tv.src = url;
-			}else{
+			} else {
 				alert("The current browser does not support playing this video!\n当前浏览器不支持播放该视频！")
 			}
-			
+
 		},
-		loadTVList:function(list){
+		loadTVList: function(list) {
 			this._setting.tv_list = list;
 		},
-		_initTV: function(){
+		_initTV: function() {
+			let _this = this;
 			let div = document.createElement('div');
 			let tv = document.createElement("div");
 			let switchs = document.createElement("div");
 			let switchlist = document.createElement("div");
 			let switchHead = document.createElement("div");
 			switchHead.innerText = "节目单";
-			addClass("stack-tv-switch-head",switchHead);
+			let switchSearch = document.createElement("div");
+			let input = document.createElement("input");
+			input.placeholder = "搜索节目";
+			switchSearch.appendChild(input);
+			addClass("stack-tv-switch-foot", switchSearch);
+			addClass("stack-tv-switch-head", switchHead);
 			addClass("stack-tv-container", div);
 			addClass("stack-tv-switch", switchs);
-			addClass("stack-tv-switch-list",switchlist);
+			addClass("stack-tv-switch-list", switchlist);
 			addClass("stack-tv-box", tv);
 			switchs.appendChild(switchHead);
 			switchs.appendChild(switchlist);
+			switchs.appendChild(switchSearch);
 			let video = document.createElement("video");
 			video.autoplay = true;
 			video.controls = true;
-			addClass("stack-tv-video",video);
+			addClass("stack-tv-video", video);
 			this._stackvideo = video;
 			this._stackswitchbox = switchs;
 			this._stackswithlist = switchlist;
+			//图片懒加载
+			this._stackswithlist.addEventListener("scroll", lazyLoadImg);
+			window.addEventListener("resize", lazyLoadImg);
+			window.addEventListener("orientationChange", lazyLoadImg);
 			tv.appendChild(video);
 			div.appendChild(tv);
 			div.appendChild(switchs);
-			let container = document.querySelector(this._setting.selector) ? document.querySelector(this._setting.selector) : document.querySelector("body");
+			let container = document.querySelector(this._setting.selector) ? document.querySelector(this
+				._setting.selector) : document.querySelector("body");
 			container.appendChild(div);
+
+			//节目搜索
+			input.addEventListener("keyup", function(e) {
+				let priventList = [13, 32];
+				let key = e.keyCode;
+				let inputValue = input.value.trim()
+				if (priventList.indexOf(key) >= 0 && inputValue.length<=0) {
+					input.value = "";
+					e.stopPropagation();
+					return;
+				}
+				if (inputValue.length > 0) {
+					for (let i = 0; i < _this._setting.tv_list.length; i++) {
+						if (_this._setting.tv_list[i].tv_name.indexOf(inputValue) < 0) {
+							_this._setting.tv_list[i].hidden = true;
+						} else {
+							_this._setting.tv_list[i].hidden = false;
+						}
+					}
+					_this._genSwitches();
+				} else {
+					for (let i = 0; i < _this._setting.tv_list.length; i++) {
+						_this._setting.tv_list[i].hidden = false;
+
+					}
+					_this._genSwitches();
+				}
+
+			});
+
+			function lazyLoadImg() {
+				let lazyImgs = _this._stackswithlist.querySelectorAll(".lazyImg");
+				lazyImgs.forEach((img) => {
+					if (isInViewPort(_this._stackswithlist, img)) {
+						img.src = img.parentNode.getAttribute("tv_logo");
+						img.addEventListener("error", function() {
+							img.src = _this._setting.default_logo;
+							img.removeEventListener("error");
+						});
+						removeClass("lazyImg", img);
+						addClass("loadedImg", img);
+					}
+				});
+			}
 		},
-		_genSwitches: function(){
+		_genSwitches: function() {
 			let _this = this;
 			_this._stackswithlist.innerHTML = "";
-			for(let i=0;i<_this._setting.tv_list.length;i++){
+			for (let i = 0; i < _this._setting.tv_list.length; i++) {
 				let div = document.createElement("div");
 				let img = new Image();
 				let tvname = document.createElement("div");
-				addClass("tv-name",tvname);
-				tvname.innerText = _this._setting.tv_list[i].tv_name ? _this._setting.tv_list[i].tv_name : `节目-${i+1}`;
+				addClass("tv-name", tvname);
+				tvname.innerText = _this._setting.tv_list[i].tv_name ? _this._setting.tv_list[i].tv_name :
+					`节目-${i+1}`;
 				addClass("stack-tv-switch-item", div);
-				div.setAttribute("tv_name",_this._setting.tv_list[i].tv_name);
-				div.setAttribute("tv_url",_this._setting.tv_list[i].tv_url);
-				div.setAttribute("tv_logo",_this._setting.tv_list[i].tv_logo);
-				img.src = _this._setting.tv_list[i].tv_logo ? _this._setting.tv_list[i].tv_logo : _this._setting.default_logo;
+				_this._setting.tv_list[i].hidden ? addClass("hidden", div) : "";
+				div.setAttribute("tv_name", _this._setting.tv_list[i].tv_name);
+				div.setAttribute("tv_url", _this._setting.tv_list[i].tv_url);
+				div.setAttribute("tv_logo", _this._setting.tv_list[i].tv_logo);
+				img.src = _this._setting.default_logo;
+				addClass("lazyImg", img);
 				div.appendChild(img);
 				div.appendChild(tvname);
-				div.addEventListener("click",function(){
+				div.addEventListener("click", function() {
 					_this.loadUrl(_this._setting.tv_list[i].tv_url);
 					_this._stackvideo.poster = img.src;
 				});
 				_this._stackswithlist.appendChild(div);
+				if (isInViewPort(_this._stackswithlist, img)) {
+					img.src = img.parentNode.getAttribute("tv_logo");
+					removeClass("lazyImg", img);
+					addClass("loadedImg", img);
+				}
 			}
 		},
 		help: function() {
@@ -178,6 +244,14 @@
 
 		element.setAttribute("class", classList.join(" "));
 
+	}
+
+	function isInViewPort(parent, sub) {
+		const parentClient = parent.getBoundingClientRect();
+		const subClient = sub.getBoundingClientRect();
+		let bottom = parentClient.bottom - subClient.bottom;
+		let right = parentClient.right - subClient.right;
+		return (bottom >= 0 && right >= 0);
 	}
 
 	SimpleStackTV.fn.init.prototype = SimpleStackTV.fn;

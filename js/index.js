@@ -24,7 +24,8 @@
 	});
 	const STACKTV = $STV({
 		"selector": ".container",
-		"hls": false
+		"hls": false,
+		"default_logo": "./img/logo.png"
 	});
 	let url = new URL(location.href).searchParams.get("url") || "";
 	fetch(`https://livetv.stackblog.cf?url=${url}`).then(res => res.json()).then(data => {
