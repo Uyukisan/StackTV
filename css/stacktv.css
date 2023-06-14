@@ -180,6 +180,59 @@ img.loadedImg {
 	animation: scale-in-center 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 }
 
+.stack-tv-log-list{
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	bottom: 2.5rem;
+	margin: 0;
+	padding: 0;
+	max-width: 25%;
+	overflow: hidden;
+	transition: all .3s ease;
+}
+.stack-tv-log-list.hidden{
+	opacity: 0;
+}
+.stack-tv-log-item{
+	position: relative;
+	width: fit-content;
+	max-width: calc(100% - 0.5rem);
+	height: 1rem;
+	line-height: 1rem;
+	font-size: .75rem;
+	margin-left: .5rem;
+	margin-bottom: .25rem;
+	padding-left: .25rem;
+	padding-right: .25rem;
+	border-radius: .5rem;
+	color: rgb(255, 255, 255);
+	background: rgba(0, 0, 0, 0.1);
+	flex: 0 0 auto;
+	text-align: left;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	-webkit-user-select:none;/*webkit浏览器*/
+	-moz-user-select:none;/*火狐*/
+	-ms-user-select:none;/*IE10*/
+	user-select:none;
+	opacity: 1;
+}
+.stack-tv-log-item:before{
+	position: absolute;
+	content: "";
+	height: 100%;
+	width: 100%;
+	background: rgba(0, 0, 0, .3);
+	filter: blur(10px);
+}
+.stack-tv-log-item.hidden{
+	opacity: 0;
+	margin: 0;
+	padding: 0;
+	height: 0;
+}
 @media only screen and (max-width: 767px) {
 	.stack-tv-container {
 		display: flex;
@@ -229,6 +282,14 @@ img.loadedImg {
 
 	.stack-tv-switch-item:last-child {
 		margin-right: 0;
+	}
+	.stack-tv-switch-item.hidden{
+		width: 0;
+		height: 0;
+		opacity: 0;
+	}
+	.stack-tv-log-list{
+		max-width: 50%;
 	}
 }
 
