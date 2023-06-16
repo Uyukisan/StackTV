@@ -1,5 +1,5 @@
-(function(window) {
-	try{
+(function (window) {
+	try {
 		const MGC = $MGC({
 			icon: "./img/logo.png",
 			name: "Stack TV",
@@ -11,7 +11,7 @@
 			darkmode: 2,
 			maxWidth: "30rem",
 			defaultClosed: true,
-			hitokoto:{
+			hitokoto: {
 				enable: true
 			},
 			links: [{
@@ -23,36 +23,30 @@
 				"url": "https://github.com/Uyukisan/StackTV"
 			}]
 		});
-	}catch(e){
+	} catch (e) {
 		console.error("MGC加载失败");
 	}
-	const STACKTV = $STV({
-		"selector": ".container",
-		"showAbout":false
+	const STACKTV = $ASTV({
+		selector: ".container",
+		showAbout: false,
+		lazyLoadSize: 20,
+		autoPlay: true,
+		// showLog: false
 	});
-	let url = new URL(location.href).searchParams.get("url") || "";
+	let url = new URL(location.href).searchParams.get("url") || "https://iptv-org.github.io/iptv/index.m3u";
 	let playUrl = new URL(location.href).searchParams.get("playUrl") || "";
 	url = url.trim();
 	playUrl = playUrl.trim();
-	if(playUrl.length > 0){
-		try{
+	if (playUrl.length > 0) {
+		try {
 			STACKTV.loadUrl(playUrl);
-			console.info("准备播放节目："+playUrl);
-		}catch(err){
-			console.error("请求发生错误:"+playUrl);
+			console.info("准备播放节目：" + playUrl);
+		} catch (err) {
+			console.error("请求发生错误:" + playUrl);
 			console.error(err)
 		}
-		
+
 		return;
 	}
-	STACKTV.log("正在请求远程数据...");
-	fetch(`https://livetv.stackblog.cf?url=${url}`).then(res => res.json()).then(data => {
-		STACKTV.log("远程数据请求成功...");
-		STACKTV.loadTVList(data['data']);
-		console.info("准备播放节目列表："+url);
-	}).catch(err => {
-		STACKTV.log("远程数据请求失败");
-		console.error("请求发生错误:"+url);
-		console.error(err)
-	});
+	STACKTV.fetchM3U(url);
 })(window)
