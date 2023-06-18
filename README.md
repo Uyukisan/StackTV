@@ -25,19 +25,33 @@ https://tv.stackblog.cf/?playUrl=http://dbiptv.sn.chinamobile.com/PLTV/88888888/
 
 ### 创建自己的StackTV
 
-| 参数名        | 参数类型 | 默认值 | 参数说明                                                     |
-| ------------- | -------- | ------ | ------------------------------------------------------------ |
-| selector      | string   | body   | Stack TV的选择器，需要设置宽高                                  |
-| autoPlay      | boolean  | true   | 自动播放                                                     |
-| autoPlayFirst | boolean  | true   | 自动播放节目列表的第一个节目（视频）                         |
-| default_url   | string   | -      | 默认的播放链接                                               |
-| default_logo  | string   | -      | 默认的节目（视频）封面                                       |
-| fetchTimeOut  | int      | 30000  | 请求远程节目列表文件超时，单位ms（毫秒）                     |
-| lazyLoadSize  | int      | 100    | 节目（视频）列表懒加载（防止远程节目列表过大导致页面渲染卡死） |
-| maxLog        | int      | 6      | 视频log的最大显示数目                                        |
-| showLog       | boolean  | true   | 显示视频log                                                  |
-| showAbout     | boolean  | true   | 显示StackTV介绍                                              |
-| -             |          |        |                                                              |
+| 参数名          | 参数类型 | 默认值 | 参数说明                                                     |
+| --------------- | -------- | ------ | ------------------------------------------------------------ |
+| selector        | string   | body   | StackTV的选择器，需要设置宽高                                  |
+| autoPlay        | boolean  | true   | 自动播放                                                     |
+| autoPlayFirst   | boolean  | true   | 自动播放节目列表的第一个节目（视频）                         |
+| default_url     | string   | -      | 默认的播放链接                                               |
+| default_logo    | string   | -      | 默认的节目（视频）封面                                       |
+| fetchTimeOut    | int      | 30000  | 请求远程节目列表文件超时，单位ms（毫秒）                     |
+| lazyLoadSize    | int      | 100    | 节目（视频）列表懒加载（防止远程节目列表过大导致页面渲染卡死） |
+| maxLog          | int      | 6      | 视频log的最大显示数目                                        |
+| showLog         | boolean  | true   | 显示视频log                                                  |
+| showAbout       | boolean  | true   | 显示StackTV介绍                                              |
+| controls        | -        | -      | 视频控制按钮，详见下表                                       |
+| autoTheaterMode | boolean  | true   | 移动端自动影院模式                                           |
+
+| contorls参数     | 参数类型 | 默认值 | 参数说明           |
+| ---------------- | -------- | ------ | ------------------ |
+| playToggle       | boolean  | true   | 播放/暂停          |
+| playPrev         | boolean  | true   | 播放上一个         |
+| playNext         | boolean  | true   | 播放下一个         |
+| volumePanel      | boolean  | true   | 调节声音           |
+| theaterMode       | boolean  | true   | 影院模式       |
+| fullScreen       | boolean  | true   | 全屏               |
+| pictureInPicture | boolean  | true   | 画中画（小窗模式） |
+| -                |          |        |                    |
+
+
 
 ```html
 <link rel="stylesheet" href="./css/stacktv.css">
@@ -53,16 +67,29 @@ https://tv.stackblog.cf/?playUrl=http://dbiptv.sn.chinamobile.com/PLTV/88888888/
 // $ASTV === AwesomeStackTV
 const STACKTV = $ASTV({
 	selector: ".container",
-  autoPlay: true,
-  autoPlayFirst: true,
-  default_url: "https://vmcdn.stackblog.ml/video/simplestacktv_1.m3u8",
-  default_logo: "https://tv.stackblog.cf/img/logo.png",
-  fetchTimeOut: 30000,
-	showAbout: false,
+	autoPlay: true,
+	autoPlayFirst: true,
+	default_url: "https://vmcdn.stackblog.ml/video/simplestacktv_1.m3u8",
+	default_logo: "https://tv.stackblog.cf/img/logo.png",
+	fetchTimeOut: 30000,
 	lazyLoadSize: 20,
-  maxLog: 4,
+	maxLog: 4,
 	showLog: true,
-	showAbout: false
+	showAbout: false,
+  autoTheaterMode: true,
+	controls: {
+		playToggle: true,
+		playPrev: true,
+		playNext: true,
+		volumePanel: true,
+		fullScreen: true,
+		pictureInPicture: true,
+		timeProgress: true,
+		currentTime: true,
+		playRate: [0.5, 1, 1.5, 2],
+		audioTrack: true,
+		theaterMode: true
+	}
 });
 //使用1:解析和播放远程直播源列表文件
 STACKTV.fetchM3U("https://iptv-org.github.io/iptv/index.m3u");

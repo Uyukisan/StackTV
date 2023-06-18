@@ -15,21 +15,6 @@ html {
 	;
 }
 
-body {
-	width: 100%;
-	height: 100vh;
-	background:
-		radial-gradient(black 3px, transparent 4px),
-		radial-gradient(black 3px, transparent 4px),
-		linear-gradient(#fff 4px, transparent 0),
-		linear-gradient(45deg, transparent 74px, transparent 75px, #a4a4a4 75px, #a4a4a4 76px, transparent 77px, transparent 109px),
-		linear-gradient(-45deg, transparent 75px, transparent 76px, #a4a4a4 76px, #a4a4a4 77px, transparent 78px, transparent 109px),
-		#fff;
-	background-size: 109px 109px, 109px 109px, 100% 6px, 109px 109px, 109px 109px;
-	background-position: 54px 55px, 0px 0px, 0px 0px, 0px 0px, 0px 0px;
-	background-attachment: fixed;
-}
-
 .stack-tv-container {
 	position: relative;
 	display: flex;
@@ -50,10 +35,25 @@ body {
 	max-height: 100%;
 	border-radius: 1rem;
 	overflow: hidden;
-	background: #2f3542;
-	border: 2px solid #2f3542;
+	background: rgba(0, 0, 0);
+	/* border: 2px solid #2f3542; */
 	box-shadow: 0px 0px 1rem #2f3542;
 	transition: all .3s ease;
+}
+
+.stack-tv-box.wide-screen {
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	margin: 0;
+	padding: 0;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	z-index: 9999;
+	border-radius: 0;
+	scrollbar-width: none;
 }
 
 .stack-tv-box:hover {
@@ -80,7 +80,6 @@ body {
 	line-height: 1rem;
 	align: center;
 } */
-
 .stack-tv-switch {
 	display: flex;
 	flex-direction: column;
@@ -92,6 +91,22 @@ body {
 	border: 2px solid #2f3542;
 	box-shadow: 0px 0px 1rem #2f3542;
 	transition: all .3s ease;
+}
+
+.stack-tv-switch.hidden {
+	position: fixed;
+	right: 0;
+	transform: translateX(100%);
+}
+
+.stack-tv-switch.shown {
+	position: fixed;
+	right: 0;
+	transform: translateX(0);
+	z-index: 10000;
+	/* height: 100vh; */
+	top: 0;
+	bottom: 0;
 }
 
 .stack-tv-switch:hover {
@@ -181,15 +196,17 @@ body {
 	object-fit: contain;
 	transition: all .3s ease;
 }
-.stack-tv-switch-item:hover{
+
+.stack-tv-switch-item:hover {
 	box-shadow: 0px 0px 1rem rgba(255, 255, 255, 0.6);
 }
+
 img.loadedImg {
 	-webkit-animation: scale-in-center 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 	animation: scale-in-center 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 }
 
-.stack-tv-log-list{
+.stack-tv-log-list {
 	position: absolute;
 	display: flex;
 	flex-direction: column;
@@ -200,10 +217,12 @@ img.loadedImg {
 	overflow: hidden;
 	transition: all .3s ease;
 }
-.stack-tv-log-list.hidden{
+
+.stack-tv-log-list.hidden {
 	opacity: 0;
 }
-.stack-tv-log-item{
+
+.stack-tv-log-item {
 	position: relative;
 	width: fit-content;
 	max-width: calc(100% - 0.5rem);
@@ -222,13 +241,17 @@ img.loadedImg {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	-webkit-user-select:none;/*webkit浏览器*/
-	-moz-user-select:none;/*火狐*/
-	-ms-user-select:none;/*IE10*/
-	user-select:none;
+	-webkit-user-select: none;
+	/*webkit浏览器*/
+	-moz-user-select: none;
+	/*火狐*/
+	-ms-user-select: none;
+	/*IE10*/
+	user-select: none;
 	opacity: 1;
 }
-.stack-tv-log-item:before{
+
+.stack-tv-log-item:before {
 	position: absolute;
 	content: "";
 	height: 100%;
@@ -236,32 +259,174 @@ img.loadedImg {
 	background: rgba(0, 0, 0, .3);
 	filter: blur(10px);
 }
-.stack-tv-log-item.hidden{
+
+.stack-tv-log-item.hidden {
 	opacity: 0;
 	margin: 0;
 	padding: 0;
 	height: 0;
 }
 
-.stack-tv-toolbox{
+/* .stack-tv-box:hover .stack-tv-toolbox{
+	opacity: 1;
+} */
+.stack-tv-toolbox {
+	/* width: 80%; */
 	position: absolute;
 	display: flex;
+	padding: .5rem;
 	flex-direction: column;
+	bottom: 2rem;
+	border-radius: .25rem;
+	overflow: hidden;
+	left: 50%;
+	transform: translateX(-50%);
+	-webkit-backdrop-filter: blur(10px);
+	backdrop-filter: blur(10px);
+	background: rgba(255, 255, 255, 0.3);
+	box-shadow: 0px 0px 1rem rgba(0, 0, 0, 0.3);
+	transition: all .3s ease;
+	/* opacity: 0; */
 }
-.stack-tv-toolbar{
+
+.stack-tv-box.undisturbed {
+	cursor: none;
+}
+.stack-tv-box.undisturbed .stack-tv-toolbox{
+	opacity: 0;
+}
+
+
+/* .stack-tv-toolbox::after{
+	content: "";
+	width: 100%;
+	height: 100%;
+	filter: blur(10px);
+	margin: -.5rem;
+} */
+.stack-tv-toolbar {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: nowrap;
-	bottom: 1rem;
-	background: #2f3542;
+	align-items: center;
 }
-.stack-tv-toolbar-item{
-	width: 2rem;
-	height: 2rem;
+
+.stack-tv-toolbar-item {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 1.875rem;
+	height: 1.875rem;
+	color: rgba(0, 0, 0, 0.75);
+	margin: 0 .5rem;
+	cursor: pointer;
+	transition: all .2s ease-in-out;
 }
-.stack-tv-progressbar{
-	
+
+.stack-tv-toolbar-item.small {
+	width: 1.5rem;
+	height: 1.5rem;
 }
+
+.stack-tv-toolbar-item.s-small {
+	width: 1rem;
+	height: 1rem;
+}
+
+.stack-tv-toolbar-item:hover {
+	transform: scale(1.1);
+}
+
+.stack-tv-toolbar-item svg {
+	width: 100%;
+	height: 100%;
+	fill: currentColor;
+}
+
+.stack-tv-toobar-volume {
+	display: flex;
+	margin: 0 .5rem;
+	margin-right: 1rem;
+	flex-direction: row;
+	align-items: center;
+	height: 1rem;
+	color: rgba(0, 0, 0, 0.75);
+}
+
+.stack-tv-toobar-volume .volume-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 1rem;
+	height: 1rem;
+	flex: 0 0 auto;
+	margin: 0 .5rem;
+	margin-right: 1rem;
+}
+
+.volume-icon svg {
+	width: 100%;
+	height: 100%;
+	fill: currentColor;
+}
+
+.stack-tv-toobar-volume .volume-bar {
+	display: flex;
+	position: relative;
+	align-items: center;
+	height: .25rem;
+	border-radius: .125rem;
+	width: 4rem;
+	background: rgba(0, 0, 0, 0.2);
+	cursor: pointer;
+}
+
+.volume-bar::after {
+	position: absolute;
+	content: "";
+	left: 0;
+	width: var(--current-volume);
+	background: #1e90ff;
+	height: .25rem;
+	border-radius: .125rem;
+	z-index: 1;
+}
+
+.volume-bar .bar-item {
+	position: absolute;
+	width: .75rem;
+	height: .75rem;
+	transform: translateX(-50%);
+	left: 0;
+	background: rgb(255, 255, 255);
+	border-radius: 50%;
+	cursor: pointer;
+	z-index: 2;
+}
+
+.volume-bar .bar-item {
+	box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.4);
+}
+
+.stack-tv-toobar-more {
+	display: flex;
+	align-items: center;
+	height: 1rem;
+	margin: 0 .5rem;
+	margin-left: 1rem;
+}
+
+.stack-tv-theaterMode{
+	scrollbar-width: none;
+	background: rgba(0, 0, 0, 1);
+}
+
+.stack-tv-theaterMode::-webkit-scrollbar{
+	width: 0;
+}
+
+.stack-tv-progressbar {}
+
 @media only screen and (max-width: 767px) {
 	.stack-tv-container {
 		display: flex;
@@ -280,6 +445,24 @@ img.loadedImg {
 		flex-direction: row;
 		width: 100%;
 		height: 25%;
+	}
+
+	.stack-tv-switch.hidden {
+		position: fixed;
+		bottom: 0;
+		transform: translateY(100%);
+	}
+
+	.stack-tv-switch.shown {
+		position: fixed;
+		transform: translateY(0);
+		z-index: 10000;
+		width: 100vw;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		bottom: 0;
+		top: unset;
 	}
 
 	.stack-tv-switch-head {
@@ -307,22 +490,59 @@ img.loadedImg {
 		height: 100%;
 		margin: 0;
 		margin-right: 1rem;
-		
 	}
+
 
 	.stack-tv-switch-item:last-child {
 		margin-right: 0;
 	}
-	.stack-tv-switch-item.hidden{
+
+	.stack-tv-switch-item.hidden {
 		width: 0;
 		height: 0;
 		opacity: 0;
 	}
-	.stack-tv-log-list{
+
+	.stack-tv-log-list {
 		max-width: 50%;
+	}
+
+	.stack-tv-toobar-volume {
+		margin: 0;
+	}
+
+	.stack-tv-toobar-more {
+		margin: 0;
+	}
+
+	.stack-tv-toobar-volume .volume-bar {
+		width: 3rem;
+	}
+
+	.stack-tv-toolbar-item {
+		width: 1.5rem;
+		height: 1.5rem;
+	}
+
+	.stack-tv-toolbar-item.small {
+		width: 1.25rem;
+		height: 1.25rem;
+	}
+
+	.stack-tv-toolbar-item.s-small {
+		width: .75rem;
+		height: .75rem;
 	}
 }
 
+@media only screen and (max-width: 767px) and (orientation: landscape){
+	.stack-tv-switch-item{
+		width: 25%;
+	}
+	.stack-tv-switch-foot{
+		width: 5rem;
+	}
+}
 /* ----------------------------------------------
  * Generated by Animista on 2023-6-13 0:22:43
  * Licensed under FreeBSD License.
@@ -360,5 +580,24 @@ img.loadedImg {
 		-webkit-transform: scale(1);
 		transform: scale(1);
 		opacity: 1;
+	}
+}
+
+@media screen and (prefers-color-scheme:dark) {
+	.stack-tv-toolbox {
+		background: rgba(0, 0, 0, 0.3);
+		box-shadow: 0px 0px 1rem rgba(255, 255, 255, 0.3);
+	}
+
+	.stack-tv-toobar-volume {
+		color: rgba(255, 255, 255, 0.75);
+	}
+
+	.stack-tv-toolbar-item {
+		color: rgba(255, 255, 255, 0.75);
+	}
+
+	.stack-tv-toobar-volume .volume-bar {
+		background: rgba(255, 255, 255, .2);
 	}
 }

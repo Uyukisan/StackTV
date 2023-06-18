@@ -17,10 +17,17 @@
 			links: [{
 				"title": "我的博客",
 				"url": "https://stackblog.cf/",
-				"type": "primary"
+				"type": "primary",
+				"target": "_blank"
+			}, {
+				"title": "使用教程",
+				"url": "https://stackblog.cf/tv/",
+				"type": "dark",
+				"target": "_blank"
 			}, {
 				"title": "Stack TV Usage",
-				"url": "https://github.com/Uyukisan/StackTV"
+				"url": "https://github.com/Uyukisan/StackTV",
+				"target": "_blank"
 			}]
 		});
 	} catch (e) {

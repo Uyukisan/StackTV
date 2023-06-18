@@ -17,13 +17,57 @@
 		showLog: true,
 		fetchTimeOut: 30000,
 		lazyLoadSize: 100,
+		autoTheaterMode: true,
 		tv_list: [{
 			'tv_name': 'Stack TV',
 			'tv_logo': 'https://tv.stackblog.cf/img/logo.png',
 			'tv_url': 'https://vmcdn.stackblog.ml/video/simplestacktv_1.m3u8'
-		}]
-	}
+		}],
+		controls: {
+			playToggle: true,
+			playPrev: true,
+			playNext: true,
+			volumePanel: true,
+			fullScreen: true,
+			pictureInPicture: true,
+			timeProgress: true,
+			currentTime: true,
+			playRate: [0.5, 1, 1.5, 2],
+			audioTrack: true,
+			theaterMode: true
+		}
+	};
+	var ICONS = new Map([
+		['next',
+			`<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M52.5 440.6c-9.5 7.9-22.8 9.7-34.1 4.4S0 428.4 0 416V96C0 83.6 7.2 72.3 18.4 67s24.5-3.6 34.1 4.4L224 214.3V256v41.7L52.5 440.6zM256 352V256 128 96c0-12.4 7.2-23.7 18.4-29s24.5-3.6 34.1 4.4l192 160c7.3 6.1 11.5 15.1 11.5 24.6s-4.2 18.5-11.5 24.6l-192 160c-9.5 7.9-22.8 9.7-34.1 4.4s-18.4-16.6-18.4-29V352z"/></svg>`
+		],
+		['prev',
+			`<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M459.5 440.6c9.5 7.9 22.8 9.7 34.1 4.4s18.4-16.6 18.4-29V96c0-12.4-7.2-23.7-18.4-29s-24.5-3.6-34.1 4.4L288 214.3V256v41.7L459.5 440.6zM256 352V256 128 96c0-12.4-7.2-23.7-18.4-29s-24.5-3.6-34.1 4.4l-192 160C4.2 237.5 0 246.5 0 256s4.2 18.5 11.5 24.6l192 160c9.5 7.9 22.8 9.7 34.1 4.4s18.4-16.6 18.4-29V352z"/></svg>`
+		],
+		['play',
+			`<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg>`
+		],
+		['pause',
+			`<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 320 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M48 64C21.5 64 0 85.5 0 112V400c0 26.5 21.5 48 48 48H80c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H48zm192 0c-26.5 0-48 21.5-48 48V400c0 26.5 21.5 48 48 48h32c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H240z"/></svg>`
+		],
+		['volume',
+			`<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M533.6 32.5C598.5 85.3 640 165.8 640 256s-41.5 170.8-106.4 223.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C557.5 398.2 592 331.2 592 256s-34.5-142.2-88.7-186.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zM473.1 107c43.2 35.2 70.9 88.9 70.9 149s-27.7 113.8-70.9 149c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C475.3 341.3 496 301.1 496 256s-20.7-85.3-53.2-111.8c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zm-60.5 74.5C434.1 199.1 448 225.9 448 256s-13.9 56.9-35.4 74.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C393.1 284.4 400 271 400 256s-6.9-28.4-17.7-37.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zM301.1 34.8C312.6 40 320 51.4 320 64V448c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352H64c-35.3 0-64-28.7-64-64V224c0-35.3 28.7-64 64-64h67.8L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3z"/></svg>`
+		],
+		['fullscreen',
+			`<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M32 32C14.3 32 0 46.3 0 64v96c0 17.7 14.3 32 32 32s32-14.3 32-32V96h64c17.7 0 32-14.3 32-32s-14.3-32-32-32H32zM64 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7 14.3 32 32 32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H64V352zM320 32c-17.7 0-32 14.3-32 32s14.3 32 32 32h64v64c0 17.7 14.3 32 32 32s32-14.3 32-32V64c0-17.7-14.3-32-32-32H320zM448 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64H320c-17.7 0-32 14.3-32 32s14.3 32 32 32h96c17.7 0 32-14.3 32-32V352z"/></svg>`
+		],
+		['exitFullscreen',
+			`<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M160 64c0-17.7-14.3-32-32-32s-32 14.3-32 32v64H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h96c17.7 0 32-14.3 32-32V64zM32 320c-17.7 0-32 14.3-32 32s14.3 32 32 32H96v64c0 17.7 14.3 32 32 32s32-14.3 32-32V352c0-17.7-14.3-32-32-32H32zM352 64c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7 14.3 32 32 32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H352V64zM320 320c-17.7 0-32 14.3-32 32v96c0 17.7 14.3 32 32 32s32-14.3 32-32V384h64c17.7 0 32-14.3 32-32s-14.3-32-32-32H320z"/></svg>`
+		],
+		['pinp',
+			`<svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M868.173913 534.26087h-178.086956A156.004174 156.004174 0 0 0 534.26087 690.086957v178.086956a156.004174 156.004174 0 0 0 155.826087 155.826087h178.086956a156.004174 156.004174 0 0 0 155.826087-155.826087v-178.086956A156.004174 156.004174 0 0 0 868.173913 534.26087zM890.434783 868.173913a22.26087 22.26087 0 0 1-22.26087 22.26087h-178.086956a22.26087 22.26087 0 0 1-22.26087-22.26087v-178.086956a22.26087 22.26087 0 0 1 22.26087-22.26087h178.086956a22.26087 22.26087 0 0 1 22.26087 22.26087z"  p-id="2385"></path><path d="M779.130435 0h-534.26087A245.136696 245.136696 0 0 0 0 244.869565v534.26087a245.136696 245.136696 0 0 0 244.869565 244.869565h212.368696a66.782609 66.782609 0 0 0 0-133.565217H244.869565A111.393391 111.393391 0 0 1 133.565217 779.130435v-534.26087A111.393391 111.393391 0 0 1 244.869565 133.565217h534.26087A111.393391 111.393391 0 0 1 890.434783 244.869565v222.608696a66.782609 66.782609 0 0 0 133.565217 0v-222.608696A245.136696 245.136696 0 0 0 779.130435 0z"></path></svg>`
+		],
+		['film',
+			`<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M0 96C0 60.7 28.7 32 64 32H448c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zM48 368v32c0 8.8 7.2 16 16 16H96c8.8 0 16-7.2 16-16V368c0-8.8-7.2-16-16-16H64c-8.8 0-16 7.2-16 16zm368-16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V368c0-8.8-7.2-16-16-16H416zM48 240v32c0 8.8 7.2 16 16 16H96c8.8 0 16-7.2 16-16V240c0-8.8-7.2-16-16-16H64c-8.8 0-16 7.2-16 16zm368-16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V240c0-8.8-7.2-16-16-16H416zM48 112v32c0 8.8 7.2 16 16 16H96c8.8 0 16-7.2 16-16V112c0-8.8-7.2-16-16-16H64c-8.8 0-16 7.2-16 16zM416 96c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V112c0-8.8-7.2-16-16-16H416zM160 128v64c0 17.7 14.3 32 32 32H320c17.7 0 32-14.3 32-32V128c0-17.7-14.3-32-32-32H192c-17.7 0-32 14.3-32 32zm32 160c-17.7 0-32 14.3-32 32v64c0 17.7 14.3 32 32 32H320c17.7 0 32-14.3 32-32V320c0-17.7-14.3-32-32-32H192z"/></svg>`
+		]
+	]);
 	var hideLogTimer;
+	var removeDisturbTimer;
 	var AwesomeStackTV = function(option, undefined) {
 		return new AwesomeStackTV.fn.init(option, undefined);
 	};
@@ -33,6 +77,7 @@
 			let _this = this;
 			_this._setting = extend({}, defaultSetting, option);
 			_this.searchResult = [];
+			this.hls = new Hls();
 			Object.defineProperties(this._setting, {
 				tv: {
 					get: function() {
@@ -64,6 +109,38 @@
 						this._currentLoadIndex = newValue;
 
 					}
+				},
+				currentTVIndex: {
+					get: function() {
+						return this._currentTVIndex || 0;
+					},
+					set: function(newValue) {
+						this._currentTVIndex = mod(newValue, _this._setting.tv_list.length);
+						let newTV = _this._setting.tv_list[this._currentTVIndex]
+						if (newTV) {
+							_this.loadUrl(newTV.tv_url);
+							_this._stackvideo.poster = newTV.tv_logo;
+						} else {
+							_this.log("没有节目了～～");
+						}
+					}
+				},
+				theaterMode: {
+					get: function() {
+						return this._theaterMode || false;
+					},
+					set: function(newValue) {
+						this._theaterMode = !newValue ? false : true;
+						if (this._theaterMode) {
+							addClass("wide-screen", _this._tvbox);
+							addClass("hidden", _this._stackswitchbox);
+							addClass("stack-tv-theaterMode", document.querySelector("body"));
+						} else {
+							removeClass("wide-screen", _this._tvbox);
+							removeClass("hidden", _this._stackswitchbox);
+							removeClass("stack-tv-theaterMode", document.querySelector("body"));
+						}
+					}
 				}
 			});
 
@@ -92,7 +169,6 @@
 				this.log("将尝试使用hls播放视频...");
 				if (Hls.isSupported()) {
 					this.log("正在载入hls...");
-					this.hls = new Hls();
 					this.hls.on(Hls.Events.ERROR, function(event, data) {
 						// _this.log("hls:视频加载出错");
 						if (data.fatal) {
@@ -109,7 +185,8 @@
 									_this.log("hls:出错了!");
 									break;
 							}
-						}	
+						}
+
 					});
 					this.hls.loadSource(url);
 					this.hls.attachMedia(this._setting.tv);
@@ -153,18 +230,21 @@
 			addClass("stack-tv-switch", switchs);
 			addClass("stack-tv-switch-list", switchlist);
 			addClass("stack-tv-box", tv);
+			addClass("undisturbed", tv);
 			addClass("stack-tv-log-list", tvLog);
 			switchs.appendChild(switchHead);
 			switchs.appendChild(switchlist);
 			switchs.appendChild(switchSearch);
 			let video = document.createElement("video");
 			video.autoplay = this._setting.autoPlay;
-			video.controls = true;
+			video.controls = false;
 			video.setAttribute('x5-playsinline', true);
 			video.setAttribute('webkit-playsinline', true);
 			video.playsInline = true;
 			addClass("stack-tv-video", video);
+			this._tvcontainer = div;
 			this._stackvideo = video;
+			this._tvbox = tv;
 			this._stackswitchbox = switchs;
 			this._stackswitchlist = switchlist;
 			this._stacktvlog = tvLog;
@@ -179,7 +259,28 @@
 			let container = document.querySelector(this._setting.selector) ? document.querySelector(this
 				._setting.selector) : document.querySelector("body");
 			container.appendChild(div);
+			this._createControlPanel();
 
+			tv.addEventListener("mousemove",tvMoveHandler);
+			function tvMoveHandler(e) {
+				if (_this._setting.theaterMode) {
+					let right = tv.getBoundingClientRect().width - e.x;
+					if (right <= 32) {
+						removeClass("hidden", _this._stackswitchbox);
+						addClass("shown", _this._stackswitchbox);
+					} else {
+						removeClass("shown", _this._stackswitchbox);
+						addClass("hidden", _this._stackswitchbox);
+					}
+				}
+				removeClass("undisturbed", _this._tvbox);
+				if (removeDisturbTimer) {
+					clearTimeout(removeDisturbTimer);
+				}
+				removeDisturbTimer = setTimeout(function() {
+					addClass("undisturbed", _this._tvbox);
+				}, 3000);
+			}
 			//节目搜索
 			input.addEventListener("keyup", function(e) {
 				let priventList = [13, 32];
@@ -190,7 +291,12 @@
 					e.stopPropagation();
 					return;
 				}
-				_this._stackswitchlist.scrollTop = 0;
+				// _this._stackswitchlist.scrollTop = 0;
+				_this._stackswitchlist.scroll({
+					left: 0,
+					top: 0,
+					behavior: 'smooth'
+				});
 				_this.searchResult = [];
 				_this._setting.currentLoadIndex = 0;
 				if (inputValue.length > 0) {
@@ -233,8 +339,8 @@
 				_this.log("开始加载...");
 			});
 			video.addEventListener("loadeddata", function() {
+				_this._stackvideo.removeAttribute("poster");
 				_this.log("努力加载...");
-
 			});
 			video.addEventListener("canplaythrough", function() {
 				_this.log("开始播放...");
@@ -248,12 +354,27 @@
 				}, 3000);
 			});
 			video.addEventListener("error", function() {
-				_this.log("加载失败!");
+				_this.log("播放出现一点问题");
 			});
-
+			video.addEventListener("progress", function() {
+				// let start = this.buffered.start(0);
+				// let end = this.buffered.end(0);
+				// let len = this.buffered.length;
+				// console.log(`${start}-${end}-len:${len}`);
+			});
 			video.oncontextmenu = function() {
 				return false;
 			}
+
+			window.addEventListener("orientationchange", function() {
+				if (isMobile() && _this._setting.autoTheaterMode) {
+					if (Math.abs(window.orientation) === 90) {
+						_this._setting.theaterMode = true;
+					} else {
+						_this._setting.theaterMode = false;
+					}
+				}
+			});
 
 			_this.log("~Stack TV加载完成~");
 
@@ -269,9 +390,12 @@
 
 				let lazySwitches = _this._stackswitchlist.querySelectorAll(".shown");
 				let lastSwitch = lazySwitches[lazySwitches.length - 1];
-				if (lastSwitch != undefined && _this._setting.currentLoadIndex > 0 && _this._setting.currentLoadIndex + 1 < _this
+				if (lastSwitch != undefined && _this._setting.currentLoadIndex > 0 && _this._setting
+					.currentLoadIndex + 1 < _this
 					._setting.tv_list.length && isInViewPort(_this._stackswitchlist, lastSwitch)) {
-					if(_this._setting.currentLoadIndex >= _this._setting.tv_list.length || (_this.searchResult.length > 0 && _this._setting.currentLoadIndex >= _this.searchResult.length)){
+					if (_this._setting.currentLoadIndex >= _this._setting.tv_list.length || (_this
+							.searchResult.length > 0 && _this._setting.currentLoadIndex >= _this
+							.searchResult.length)) {
 						return false;
 					}
 					console.info("装载更多节目列表");
@@ -280,6 +404,191 @@
 				}
 
 			}
+		},
+		_createControlPanel: function() {
+			let _this = this;
+			let panel = document.createElement("div");
+			addClass("stack-tv-toolbox", panel);
+			let toolbar = document.createElement("div");
+			this._toolbox = panel;
+			addClass("stack-tv-toolbar", toolbar);
+			let option = this._setting.controls;
+			if (option.volumePanel) {
+				let div = document.createElement("div");
+				addClass("stack-tv-toobar-volume", div);
+				let div1 = document.createElement("div");
+				addClass("volume-icon", div1);
+				div1.innerHTML = ICONS.get("volume");
+				let div2 = document.createElement("div");
+				addClass("volume-bar", div2);
+				let span = document.createElement("span");
+				addClass("bar-item", span);
+				div2.appendChild(span);
+				div.appendChild(div1);
+				div.appendChild(div2);
+				toolbar.appendChild(div);
+				this._stackvideo.addEventListener("loadeddata", function() {
+					span.style.left = `${100 * _this._stackvideo.volume}%`;
+					div2.style.setProperty('--current-volume', 100 * _this._stackvideo.volume +
+						'%');
+				});
+				span.onmousedown = function(e) {
+					let evt1 = e || event;
+					let x1 = e.x;
+					let y1 = e.y;
+					let spanW = span.getBoundingClientRect().width;
+					let divW = div2.getBoundingClientRect().width;
+					// let trackLen = divW - spanW;
+					let trackLen = divW;
+					let spanOffsetL = span.offsetLeft;
+					document.onmousemove = function(e) {
+						let evt2 = e || event;
+						let x2 = evt2.x;
+						let y2 = evt2.y;
+						let moveL = x2 - x1 + spanOffsetL + spanW / 2;
+						if (moveL <= 0) {
+							moveL = 0;
+						}
+						if (moveL > trackLen) {
+							moveL = trackLen;
+						}
+						span.style.left = `${moveL * 100 /trackLen}%`;
+						let volume = Math.floor(moveL * 100 / trackLen);
+						div2.style.setProperty('--current-volume', volume + '%');
+						_this._stackvideo.volume = moveL / trackLen;
+					}
+					document.onmouseup = function(e) {
+						document.onmousemove = null;
+					}
+				}
+				div2.onclick = function(e) {
+					let evt = e || event;
+					let spanW = span.getBoundingClientRect().width;
+					let divW = div2.getBoundingClientRect().width;
+					let divL = div2.getBoundingClientRect().left;
+					// let trackLen = divW - spanW;
+					let trackLen = divW;
+					let newL = evt.x - divL;
+					if (newL <= 0) {
+						newL = 0;
+					}
+					if (newL > trackLen) {
+						newL = trackLen;
+					}
+					span.style.left = `${newL * 100 /trackLen}%`;
+					let volume = Math.floor(newL * 100 / trackLen);
+					div2.style.setProperty('--current-volume', volume + '%');
+					_this._stackvideo.volume = newL / trackLen;
+				}
+			}
+			if (option.playPrev) {
+				let div = document.createElement("div");
+				addClass("stack-tv-toolbar-item", div);
+				addClass("small", div);
+				div.innerHTML = ICONS.get("prev");
+				toolbar.appendChild(div);
+				div.addEventListener("click", function() {
+					_this._setting.currentTVIndex -= 1;
+				});
+			}
+			if (option.playToggle) {
+				let div = document.createElement("div");
+				addClass("stack-tv-toolbar-item", div);
+				div.innerHTML = ICONS.get("play");
+				toolbar.appendChild(div);
+				div.addEventListener("click", toggle);
+				_this._stackvideo.addEventListener("play", function() {
+					div.innerHTML = ICONS.get("pause");
+				});
+
+				function toggle() {
+					if (_this._stackvideo.paused) {
+						_this._stackvideo.play();
+						div.innerHTML = ICONS.get("pause");
+					} else {
+						_this._stackvideo.pause();
+						div.innerHTML = ICONS.get("play")
+					}
+				}
+			}
+			if (option.playNext) {
+				let div = document.createElement("div");
+				addClass("stack-tv-toolbar-item", div);
+				addClass("small", div);
+				div.innerHTML = ICONS.get("next");
+				toolbar.appendChild(div);
+				div.addEventListener("click", function() {
+					_this._setting.currentTVIndex += 1;
+				});
+			}
+			if (option.fullScreen || option.pictureInPicture || option.theaterMode) {
+				let div = document.createElement("div");
+				addClass("stack-tv-toobar-more", div);
+				if (option.theaterMode) {
+					let rectan = document.createElement("div");
+					addClass("stack-tv-toolbar-item", rectan);
+					addClass("s-small", rectan);
+					rectan.innerHTML = ICONS.get("film");
+					div.append(rectan);
+					rectan.addEventListener("click", function() {
+						let theaterMode = _this._setting.theaterMode;
+						_this._setting.theaterMode = theaterMode ? false : true;
+					});
+				}
+				if (option.fullScreen) {
+					let div1 = document.createElement("div");
+					addClass("stack-tv-toolbar-item", div1);
+					addClass("s-small", div1);
+					div1.innerHTML = ICONS.get("fullscreen");
+					div.appendChild(div1);
+					div1.addEventListener("click", toggleFullscreen);
+
+					function toggleFullscreen() {
+						if (isFullscreen()) {
+							exitFullscreen(_this._tvbox);
+						} else {
+							let isFull = requestFullscreen(_this._tvbox);
+							if (isFull == 'isIOS') {
+								_this._stackvideo.webkitEnterFullscreen();
+							}
+						}
+					}
+					document.addEventListener("fullscreenchange", function() {
+						if (isFullscreen()) {
+							div1.innerHTML = ICONS.get("exitFullscreen");
+						} else {
+							div1.innerHTML = ICONS.get("fullscreen");
+						}
+					});
+
+				}
+				if (option.pictureInPicture) {
+					let div2 = document.createElement("div");
+					addClass("stack-tv-toolbar-item", div2);
+					addClass("s-small", div2);
+					div2.innerHTML = ICONS.get("pinp");
+					div.appendChild(div2);
+					div2.addEventListener("click", togglePictureInPicture);
+
+					function togglePictureInPicture() {
+						if (document.pictureInPictureElement) {
+							document.exitPictureInPicture();
+						} else {
+							if (document.pictureInPictureEnabled) {
+								_this._stackvideo.requestPictureInPicture().then((res) => {
+
+								}).catch(e => {
+									// _this.log("视频还没有准备好");
+								})
+							}
+						}
+					}
+
+				}
+				toolbar.appendChild(div);
+			}
+			panel.appendChild(toolbar);
+			this._tvbox.appendChild(panel);
 		},
 		_genSwitches: function() {
 			let _this = this;
@@ -332,8 +641,9 @@
 				div.appendChild(img);
 				div.appendChild(tvname);
 				div.addEventListener("click", function() {
-					_this.loadUrl(div.getAttribute("tv_url"));
-					_this._stackvideo.poster = div.getAttribute("tv_logo");
+					// _this.loadUrl(div.getAttribute("tv_url"));
+					// _this._stackvideo.poster = div.getAttribute("tv_logo");
+					_this._setting.currentTVIndex = div.style.getPropertyValue('--stack-tv-index');
 				});
 				_this._stackswitchlist.appendChild(div);
 				_this._setting.tv_list[tv_index].loaded = true;
@@ -414,7 +724,7 @@
 				let tv_id = tv_items[i].match(/tvg-id=\"(.*?)\"/);
 				tv_id = tv_id ? tv_id.pop() : "";
 				item.tv_name = item.tv_name.length > 0 ? item.tv_name : tv_id;
-				item.tv_name = item.tv_name.length >0 ? item.tv_name : `节目-${i}`;
+				item.tv_name = item.tv_name.length > 0 ? item.tv_name : `节目-${i}`;
 				item.tv_url = ('http' + tv_items[i].split('http').pop()).trim();
 				item.tv_url == 'http' ? item.tv_url = this._setting.default_url : "";
 				item.tv_logo = tv_items[i].match(/tvg-logo=\"(.*?)\"/);
@@ -445,6 +755,73 @@
 		}
 	}
 
+	function isFullscreenEnabled() {
+		return document.fullscreenEnabled ||
+			document.mozFullScreenEnabled ||
+			document.webkitFullscreenEnabled ||
+			document.msFullscreenEnabled || false;
+	}
+
+	function isFullscreen() {
+		return document.fullscreenElement ||
+			document.msFullscreenElement ||
+			document.mozFullScreenElement ||
+			document.webkitFullscreenElement || false;
+	}
+
+	function requestFullscreen(elem) {
+		if (!elem) {
+			return false;
+		}
+		// ios?
+		if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+			return 'isIOS';
+		} else if (elem.RequestFullScreen) {
+			elem.RequestFullScreen();
+		}
+		//兼容火狐
+		else if (elem.mozRequestFullScreen) {
+			elem.mozRequestFullScreen();
+		}
+		//兼容谷歌等
+		else if (elem.webkitRequestFullScreen) {
+			elem.webkitRequestFullScreen();
+		}
+		//兼容IE,只能写msRequestFullscreen
+		else if (elem.msRequestFullscreen) {
+			elem.msRequestFullscreen();
+		} else {
+			_this.log("貌似不支持全屏");
+		}
+		return true;
+	}
+
+	function exitFullscreen(elem) {
+		if (!elem) {
+			return false;
+		}
+		if (document.exitFullScreen) {
+			document.exitFullscreen()
+		}
+		//兼容火狐
+		console.log(document.mozExitFullScreen)
+		if (document.mozCancelFullScreen) {
+			document.mozCancelFullScreen()
+		}
+		//兼容谷歌等
+		if (document.webkitExitFullscreen) {
+			document.webkitExitFullscreen()
+		}
+		//兼容IE
+		if (document.msExitFullscreen) {
+			document.msExitFullscreen()
+		}
+	}
+
+	function isMobile() {
+		return /(iPhone|iPad|iPod|iOS|Android|Linux armv8l|Linux armv7l|Linux aarch64)/i.test(navigator.userAgent);
+	}
+
 	function fetchData(url, type = 'text') {
 		return new Promise(function(resolve, reject) {
 			fetch(url, {
@@ -460,6 +837,10 @@
 				reject(err);
 			});
 		});
+	}
+
+	function mod(n, m) {
+		return ((n % m) + m) % m;
 	}
 
 	function extend() {
